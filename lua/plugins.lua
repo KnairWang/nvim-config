@@ -78,8 +78,8 @@ require('packer').startup(function()
             -- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
             -- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
+            vim.api.nvim_set_keymap('i', '<Tab>', 'compe#confirm("<Tab>")', {expr = true})
             -- This line is important for auto-import
-            vim.api.nvim_set_keymap('i', '<Tab>', 'compe#confirm("<cr>")', {expr = true})
             vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', {expr = true})
             vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', {expr = true})
         end
@@ -227,33 +227,60 @@ require('packer').startup(function()
     use {'yamatsum/nvim-cursorline', requires = {'dracula'}}
 
     use {
-        'numtostr/FTerm.nvim',
+        "akinsho/nvim-toggleterm.lua",
         config = function()
-            local term = require('Fterm.terminal')
-            local sh = term:new():setup({
-                cmd = 'sh.exe',
-                dimensions  = {
-                    height = 0.8,
-                    width = 0.8,
-                    x = 0.5,
-                    y = 0.5
-                },
-                border = 'double' -- or 'single'
-            })
-
-            function _G.__fterm_sh_toggle()
-                sh:toggle()
-            end
-            -- vim.api.nvim_set_keymap("n", "<C-`>", "v:lua.__fterm_sh_toggle()", {expr = true})
-            --
-            local map = vim.api.nvim_set_keymap
-            local opts = { noremap = true, silent = true }
-
-            map('n', '<C-`>', '<CMD>lua __fterm_sh_toggle()<CR>', opts)
-            map('t', '<C-`>', '<C-\\><C-n><CMD>lua __fterm_sh_toggle()<CR>', opts)
+            require("toggleterm").setup{
+                -- size can be a number or function which is passed the current terminal
+                size = 20,
+                -- | function(term)
+                    -- if term.direction == "horizontal" then
+                        -- return 15
+                    -- elseif term.direction == "vertical" then
+                        -- return vim.o.columns * 0.4
+                    -- end
+                -- end,
+                open_mapping = [[<c-\>]],
+                hide_numbers = true, -- hide the number column in toggleterm buffers
+                shade_filetypes = {},
+                shade_terminals = true,
+                shading_factor = '1', -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+                start_in_insert = true,
+                insert_mappings = true, -- whether or not the open mapping applies in insert mode
+                persist_size = true,
+                direction = 'float', -- 'vertical' | 'horizontal' | 'window' | 'float',
+                close_on_exit = true, -- close the terminal window when the process exits
+                shell = 'sh.exe', -- change the default shell
+                -- This field is only relevant if direction is set to 'float'
+                -- float_opts = {
+                    -- -- The border key is *almost* the same as 'nvim_win_open'
+                    -- -- see :h nvim_win_open for details on borders however
+                    -- -- the 'curved' border is a custom border type
+                    -- -- not natively supported but implemented in this plugin.
+                    -- border = 'single', -- 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
+                    -- width = 1,
+                    -- height = 1,
+                    -- winblend = 3,
+                    -- highlights = {
+                        -- border = "Normal",
+                        -- background = "Normal",
+                    -- }
+                -- }
+            }
         end
     }
 
+    use {
+        'camspiers/snap',
+        config = function()
+            local snap = require('snap')
+            snap.maps {
+                {"<Leader><Leader>", snap.config.file {producer = "ripgrep.file"}},
+                {"<Leader>fb", snap.config.file {producer = "vim.buffer"}},
+                {"<Leader>fo", snap.config.file {producer = "vim.oldfile"}},
+                {"<Leader>ff", snap.config.vimgrep {}},
+            }
+        end
+    }
 end)
 
 local function setup_nvim_lsputils()
