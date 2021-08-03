@@ -5,6 +5,8 @@ local opt = vim.opt -- to set options
 
 require('plugins')
 
+vim.g.mapleader = '\\'
+
 vim.cmd 'set gfn=Hack\\ NF:h14'
 
 vim.cmd 'syntax on'

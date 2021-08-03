@@ -2,6 +2,8 @@ require('packer').startup(function()
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
 
+    use 'tpope/vim-surround'
+
     -- lsp
     use 'neovim/nvim-lspconfig'
     use 'nvim-lua/lsp-status.nvim'
@@ -112,9 +114,8 @@ require('packer').startup(function()
         config = function()
             require('spellsitter').setup({
                 hl = 'SpellBad',
-                captures = {},
+                captures = {'comment'},
             })
-            vim.cmd('set spell')
         end
     }
     use {
@@ -210,7 +211,7 @@ require('packer').startup(function()
                 }, {
                     WhitespaceR = {
                         provider = function() return "   " end,
-                        separator = ' '
+                        separator = ' ',
                         highlight = {colors.fg, colors.darkblue}
                     }
                 }

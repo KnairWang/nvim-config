@@ -9,8 +9,13 @@ git clone https://github.com/KnairWang/nvim-config "$env:LOCALAPPDATA\nvim"
 
 
 ### TreeSitter
+this need msys2/mingw64
+follow this doc: `https://www.msys2.org/`
+and add `.../mingw64/bin` to `$PATH`
 ```
 TSInstall toml
 
 TSInstall all
 ```
+
+
