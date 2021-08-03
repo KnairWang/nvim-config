@@ -1,9 +1,3 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
--- Only required if you have packer configured as `opt`
--- vim.cmd [[packadd packer.nvim]]
--- Only if your version of Neovim doesn't have https://github.com/neovim/neovim/pull/12632 merged
--- vim._update_package_paths()
---
 require('packer').startup(function()
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
@@ -12,63 +6,247 @@ require('packer').startup(function()
     use 'neovim/nvim-lspconfig'
     use 'nvim-lua/lsp-status.nvim'
     use 'nvim-lua/lsp_extensions.nvim'
-    use 'RishabhRD/nvim-lsputils'
+    -- use {
+    --     'RishabhRD/nvim-lsputils',
+    --     requires = {'RishabhRD/popfix'},
+    -- }
+
     use 'kosayoda/nvim-lightbulb'
     use 'ray-x/lsp_signature.nvim'
-    use 'hrsh7th/nvim-compe'
+    use {
+        'hrsh7th/nvim-compe',
+        requires = {'neovim/nvim-lspconfig'},
+        config = function()
+            -- Compe setup
+            require'compe'.setup {
+                enabled = true,
+                autocomplete = true,
+                debug = false,
+                min_length = 1,
+                preselect = 'enable',
+                throttle_time = 80,
+                source_timeout = 200,
+                incomplete_delay = 400,
+                max_abbr_width = 100,
+                max_kind_width = 100,
+                max_menu_width = 100,
+                documentation = true,
+
+                source = {path = true, nvim_lsp = true}
+            }
+
+            local t = function(str)
+                return vim.api.nvim_replace_termcodes(str, true, true, true)
+            end
+
+            local check_back_space = function()
+                local col = vim.fn.col('.') - 1
+                if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+                    return true
+                else
+                    return false
+                end
+            end
+
+            -- Use (s-)tab to:
+            --- move to prev/next item in completion menuone
+            --- jump to prev/next snippet's placeholder
+            _G.tab_complete = function()
+                if vim.fn.pumvisible() == 1 then
+                    return t "<C-n>"
+                elseif check_back_space() then
+                    return t "<Tab>"
+                else
+                    return vim.fn['compe#complete']()
+                end
+            end
+            _G.s_tab_complete = function()
+                if vim.fn.pumvisible() == 1 then
+                    return t "<C-p>"
+                else
+                    return t "<S-Tab>"
+                end
+            end
+
+            vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()",
+            {expr = true})
+            vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()",
+            {expr = true})
+            vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()",
+            {expr = true})
+            vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()",
+            {expr = true})
+
+            -- This line is important for auto-import
+            vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")',
+            {expr = true})
+            vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()',
+            {expr = true})
+        end
+    }
+
 
     -- file explorer and icon
     use 'kyazdani42/nvim-web-devicons'
-    use 'kyazdani42/nvim-tree.lua'
-
-    -- cursorline
-    use 'yamatsum/nvim-cursorline'
+    use {
+        'kyazdani42/nvim-tree.lua',
+        requires = {'kyazdani42/nvim-web-devicons'},
+        config = function()
+            vim.g.nvim_tree_auto_open = 1
+            vim.g.nvim_tree_auto_close = 0
+            vim.g.nvim_tree_follow = 1
+            vim.g.nvim_tree_highlight_opened_files = 1
+            vim.g.nvim_tree_tab_open = 1
+            vim.g.nvim_tree_add_trailing = 1
+            vim.g.nvim_tree_lsp_diagnostics = 1
+            vim.g.nvim_tree_update_cwd = 1
+            vim.g.nvim_tree_width = 40
+        end
+    }
 
     -- treesitter
     use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+    use {
+        'lewis6991/spellsitter.nvim',
+        requires = {'nvim-treesitter/nvim-treesitter'},
+        config = function()
+            require('spellsitter').setup({
+                hl = 'SpellBad',
+                captures = {},
+            })
+            vim.cmd('set spell')
+        end
+    }
+    use {
+        'winston0410/commented.nvim',
+        requires = {'nvim-treesitter'},
+        config = function()
+            require('nvim-treesitter.configs').setup({
+                context_commentstring = {
+                    enable = true,
+                    -- This plugin provided an autocommand option
+                    enable_autocmd = true,
+                }
+            })
+            require('commented').setup({
+                comment_padding = " ", -- padding between starting and ending comment symbols
+                keybindings = {n = "<C-/>", v = "<C-/>", nl = "<C-/>"}, -- what key to toggle comment, nl is for mapping <leader>c$, just like dd for d
+                prefer_block_comment = false, -- Set it to true to automatically use block comment when multiple lines are selected
+                set_keybindings = true, -- whether or not keybinding is set on setup
+                ex_mode_cmd = "Comment" -- command for commenting in ex-mode, set it null to not set the command initially.
+            })
+        end
+    }
 
     -- cursorline
     use {
         'glepnir/galaxyline.nvim',
         branch = 'main',
-        requires = {'kyazdani42/nvim-web-devicons'}
+        requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'},
+        config = function()
+            local lsp_status = require('lsp-status')
+            local colors = require('galaxyline.theme').default
+            local gl = require('galaxyline')
+
+            gl.section.left = {
+                {
+                    Whitespace = {
+                        provider = function() return "   " end,
+                        highlight = {colors.fg, colors.darkblue}
+                    }
+                },
+                {
+                    FileIcon = {
+                        provider = 'FileIcon',
+                        highlight = {colors.fg, colors.darkblue}
+                    }
+                },
+                {
+                    FileName = {
+                        provider = 'FileName',
+                        highlight = {colors.fg, colors.darkblue}
+                    }
+                }, {
+                    GitBranch = {
+                        provider = 'GitBranch',
+                        icon = '    ',
+                        separator = '  ',
+                        highlight = {colors.blue}
+                    }
+                }, {
+                    LSP = {
+                        provider = function() return lsp_status.status() end,
+                        highlight = {colors.orange, colors.darkblue}
+                    }
+                }
+            }
+            gl.section.right = {
+                {
+                    LineColumn = {
+                        provider = 'LineColumn',
+                        separator = ' ',
+                        icon = ''
+                    }
+                },
+                {
+                    LineColumn_LineNumber = {
+                        provider = function() end,
+                        separator = ' '
+                    }
+                }, {
+                    Encode = {
+                        provider = 'FileEncode',
+                        separator = ' ',
+                        icon = '',
+                        highlight = {colors.cyan, colors.purple}
+                    }
+                }, {
+                    FileType = {
+                        provider = 'FileTypeName',
+                        separator = ' ',
+                        icon = ' ',
+                        highlight = {colors.green, colors.purple}
+                    }
+                }, {
+                    WhitespaceR = {
+                        provider = function() return "   " end,
+                        separator = ' '
+                        highlight = {colors.fg, colors.darkblue}
+                    }
+                }
+            }
+        end
     }
 
     -- theme
-    use {'dracula/vim', as = 'dracula'}
+    use {
+        'dracula/vim',
+        as = 'dracula',
+        config = function() vim.cmd('colorscheme dracula') end
+    }
+
+    -- cursorline
+    -- use {'yamatsum/nvim-cursorline', requires = {'dracula'}}
 
 end)
 
-local function setup_nvim_tree()
-    -- nvim_tree
-    vim.g.nvim_tree_auto_open = 1
-    vim.g.nvim_tree_auto_close = 0
-    vim.g.nvim_tree_follow = 1
-    vim.g.nvim_tree_highlight_opened_files = 1
-    vim.g.nvim_tree_tab_open = 1
-    vim.g.nvim_tree_add_trailing = 1
-    vim.g.nvim_tree_lsp_diagnostics = 1
-    vim.g.nvim_tree_update_cwd = 1
-    vim.g.nvim_tree_width = 40
-end
-
 local function setup_nvim_lsputils()
     vim.lsp.handlers['textDocument/codeAction'] =
-        require'lsputil.codeAction'.code_action_handler
+    require('lsputil.codeAction').code_action_handler
     vim.lsp.handlers['textDocument/references'] =
-        require'lsputil.locations'.references_handler
+    require('lsputil.locations').references_handler
     vim.lsp.handlers['textDocument/definition'] =
-        require'lsputil.locations'.definition_handler
+    require('lsputil.locations').definition_handler
     vim.lsp.handlers['textDocument/declaration'] =
-        require'lsputil.locations'.declaration_handler
+    require('lsputil.locations').declaration_handler
     vim.lsp.handlers['textDocument/typeDefinition'] =
-        require'lsputil.locations'.typeDefinition_handler
+    require('lsputil.locations').typeDefinition_handler
     vim.lsp.handlers['textDocument/implementation'] =
-        require'lsputil.locations'.implementation_handler
+    require('lsputil.locations').implementation_handler
     vim.lsp.handlers['textDocument/documentSymbol'] =
-        require'lsputil.symbols'.document_handler
+    require('lsputil.symbols').document_handler
     vim.lsp.handlers['workspace/symbol'] =
-        require'lsputil.symbols'.workspace_handler
+    require('lsputil.symbols').workspace_handler
 end
 
 local function setup_lsp()
@@ -102,37 +280,37 @@ local function setup_lsp()
         buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
         buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
         buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>',
-                       opts)
+        opts)
         buf_set_keymap('n', '<C-k>',
-                       '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+        '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
         buf_set_keymap('n', '<space>wa',
-                       '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+        '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
         buf_set_keymap('n', '<space>wr',
-                       '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>',
-                       opts)
+        '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>',
+        opts)
         buf_set_keymap('n', '<space>wl',
-                       '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>',
-                       opts)
+        '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>',
+        opts)
         buf_set_keymap('n', '<space>D',
-                       '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+        '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
         buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>',
-                       opts)
+        opts)
         buf_set_keymap('n', '<space>ca',
-                       '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+        '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
         buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
         buf_set_keymap('n', '<space>e',
-                       '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',
-                       opts)
+        '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',
+        opts)
         buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',
-                       opts)
+        opts)
         buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>',
-                       opts)
+        opts)
         buf_set_keymap('n', '<space>q',
-                       '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+        '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
         buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>",
-                       opts)
+        opts)
 
-        setup_nvim_lsputils()
+        -- setup_nvim_lsputils()
     end
 
     -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -148,142 +326,4 @@ local function setup_lsp()
     end
 end
 
-local function setup_compe()
-    -- Compe setup
-    require'compe'.setup {
-        enabled = true,
-        autocomplete = true,
-        debug = false,
-        min_length = 1,
-        preselect = 'enable',
-        throttle_time = 80,
-        source_timeout = 200,
-        incomplete_delay = 400,
-        max_abbr_width = 100,
-        max_kind_width = 100,
-        max_menu_width = 100,
-        documentation = true,
-
-        source = {path = true, nvim_lsp = true}
-    }
-
-    local t = function(str)
-        return vim.api.nvim_replace_termcodes(str, true, true, true)
-    end
-
-    local check_back_space = function()
-        local col = vim.fn.col('.') - 1
-        if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-            return true
-        else
-            return false
-        end
-    end
-
-    -- Use (s-)tab to:
-    --- move to prev/next item in completion menuone
-    --- jump to prev/next snippet's placeholder
-    _G.tab_complete = function()
-        if vim.fn.pumvisible() == 1 then
-            return t "<C-n>"
-        elseif check_back_space() then
-            return t "<Tab>"
-        else
-            return vim.fn['compe#complete']()
-        end
-    end
-    _G.s_tab_complete = function()
-        if vim.fn.pumvisible() == 1 then
-            return t "<C-p>"
-        else
-            return t "<S-Tab>"
-        end
-    end
-
-    vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-    vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-    vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()",
-                            {expr = true})
-    vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()",
-                            {expr = true})
-
-    -- This line is important for auto-import
-    vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', {expr = true})
-    vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', {expr = true})
-end
-
-local function setup_galaxy_line()
-    -- galaxyline
-    local lsp_status = require('lsp-status')
-
-    local colors = require('galaxyline.theme').default
-
-    local gl = require('galaxyline')
-
-    gl.section.left = {
-        {
-            Whitespace = {
-                provider = function() return "   " end,
-                highlight = {colors.fg, colors.darkblue}
-            }
-        },
-        {
-            FileIcon = {
-                provider = 'FileIcon',
-                highlight = {colors.fg, colors.darkblue}
-            }
-        },
-        {
-            FileName = {
-                provider = 'FileName',
-                highlight = {colors.fg, colors.darkblue}
-            }
-        }, {
-            GitBranch = {
-                provider = 'GitBranch',
-                icon = '    ',
-                separator = '  ',
-                highlight = {colors.blue}
-            }
-        }, {
-            LSP = {
-                provider = function() return lsp_status.status() end,
-                highlight = {colors.orange, colors.darkblue}
-            }
-        }
-    }
-    gl.section.right = {
-        {LineColumn = {provider = 'LineColumn', separator = ' ', icon = ''}},
-        {
-            LineColumn_LineNumber = {
-                provider = function() end,
-                separator = ' '
-            }
-        }, {
-            Encode = {
-                provider = 'FileEncode',
-                separator = ' ',
-                icon = '',
-                highlight = {colors.cyan, colors.purple}
-            }
-        }, {
-            FileType = {
-                provider = 'FileTypeName',
-                separator = ' ',
-                icon = ' ',
-                highlight = {colors.green, colors.purple}
-            }
-        }, {
-            Whitespace = {
-                provider = function() return "   " end,
-                highlight = {colors.fg, colors.darkblue}
-            }
-        }
-    }
-end
-
-vim.cmd 'colorscheme dracula'
 setup_lsp()
-setup_compe()
-setup_nvim_tree()
-setup_galaxy_line()
