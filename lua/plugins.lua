@@ -8,10 +8,13 @@ require('packer').startup(function()
     use 'neovim/nvim-lspconfig'
     use 'nvim-lua/lsp-status.nvim'
     use 'nvim-lua/lsp_extensions.nvim'
-    -- use {
-    --     'RishabhRD/nvim-lsputils',
-    --     requires = {'RishabhRD/popfix'},
-    -- }
+    use {
+        'RishabhRD/nvim-lsputils',
+        requires = {'RishabhRD/popfix'},
+        config = function()
+            vim.cmd('set completeopt=menuone,noselect')
+        end
+    }
 
     use 'kosayoda/nvim-lightbulb'
     use 'ray-x/lsp_signature.nvim'
@@ -139,7 +142,6 @@ require('packer').startup(function()
         end
     }
 
-    -- cursorline
     use {
         'glepnir/galaxyline.nvim',
         branch = 'main',
@@ -227,7 +229,7 @@ require('packer').startup(function()
     }
 
     -- cursorline
-    -- use {'yamatsum/nvim-cursorline', requires = {'dracula'}}
+    use {'yamatsum/nvim-cursorline', requires = {'dracula'}}
 
 end)
 
@@ -311,7 +313,7 @@ local function setup_lsp()
         buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>",
         opts)
 
-        -- setup_nvim_lsputils()
+        setup_nvim_lsputils()
     end
 
     -- Use a loop to conveniently call 'setup' on multiple servers and
