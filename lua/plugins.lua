@@ -215,13 +215,13 @@ require('packer').startup(function()
                         -- return vim.o.columns * 0.4
                     -- end
                 -- end,
-                open_mapping = [[<c-\>]],
+                open_mapping = [[<c-`>]],
                 hide_numbers = true, -- hide the number column in toggleterm buffers
                 shade_filetypes = {},
                 shade_terminals = true,
                 shading_factor = '1', -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
                 start_in_insert = true,
-                insert_mappings = true, -- whether or not the open mapping applies in insert mode
+                insert_mappings = false, -- whether or not the open mapping applies in insert mode
                 persist_size = true,
                 direction = 'float', -- 'vertical' | 'horizontal' | 'window' | 'float',
                 close_on_exit = true, -- close the terminal window when the process exits
@@ -249,7 +249,51 @@ require('packer').startup(function()
         'nvim-telescope/telescope.nvim',
         requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
         config = function()
-            require('telescope').setup()
+            require('telescope').setup({
+                defaults = {
+                    vimgrep_arguments = {
+                        'rg',
+                        '--color=never',
+                        '--no-heading',
+                        '--with-filename',
+                        '--line-number',
+                        '--column',
+                        '--smart-case'
+                    },
+                    prompt_prefix = "> ",
+                    selection_caret = "> ",
+                    entry_prefix = "  ",
+                    initial_mode = "insert",
+                    selection_strategy = "reset",
+                    sorting_strategy = "descending",
+                    layout_strategy = "horizontal",
+                    layout_config = {
+                        horizontal = {
+                            mirror = false,
+                        },
+                        vertical = {
+                            mirror = false,
+                        },
+                    },
+                    file_sorter =  require'telescope.sorters'.get_fuzzy_file,
+                    file_ignore_patterns = {},
+                    generic_sorter =  require'telescope.sorters'.get_generic_fuzzy_sorter,
+                    winblend = 0,
+                    border = {},
+                    borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+                    color_devicons = true,
+                    use_less = true,
+                    path_display = {},
+                    set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
+                    file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
+                    grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
+                    qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+
+                    -- Developer configurations: Not meant for general override
+                    buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
+                }
+            }
+            )
         end
     }
 end)
