@@ -14,6 +14,10 @@ vim.cmd 'syntax enable'
 
 vim.cmd 'set nocompatible'
 
-vim.cmd 'set number'
+vim.cmd 'set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab'
 
-vim.cmd 'set tabstop=1 softtabstop=0 expandtab shiftwidth=4 smarttab'
+opt.number = true
+opt.relativenumber = true
+opt.scrolloff = 8
+opt.sidescrolloff = 8
+opt.shiftround = true
