@@ -3,6 +3,7 @@ require('packer').startup(function()
     use 'wbthomason/packer.nvim'
 
     use 'tpope/vim-surround'
+    use 'editorconfig/editorconfig-vim'
 
     -- lsp
     use 'neovim/nvim-lspconfig'
@@ -13,6 +14,55 @@ require('packer').startup(function()
         requires = {'RishabhRD/popfix'},
         config = function()
             vim.cmd('set completeopt=menuone,noselect')
+        end
+    }
+    use {
+        'onsails/lspkind-nvim',
+        config = function ()
+            require('lspkind').init({
+                -- enables text annotations
+                --
+                -- default: true
+                with_text = true,
+
+                -- default symbol map
+                -- can be either 'default' or
+                -- 'codicons' for codicon preset (requires vscode-codicons font installed)
+                --
+                -- default: 'default'
+                preset = 'codicons',
+
+                -- override preset symbols
+                --
+                -- default: {}
+                symbol_map = {
+                    Text = "",
+                    Method = "",
+                    Function = "",
+                    Constructor = "",
+                    Field = "ﰠ",
+                    Variable = "",
+                    Class = "ﴯ",
+                    Interface = "",
+                    Module = "",
+                    Property = "ﰠ",
+                    Unit = "塞",
+                    Value = "",
+                    Enum = "",
+                    Keyword = "",
+                    Snippet = "",
+                    Color = "",
+                    File = "",
+                    Reference = "",
+                    Folder = "",
+                    EnumMember = "",
+                    Constant = "",
+                    Struct = "פּ",
+                    Event = "",
+                    Operator = "",
+                    TypeParameter = ""
+                },
+            })
         end
     }
 
@@ -209,11 +259,11 @@ require('packer').startup(function()
                 -- size can be a number or function which is passed the current terminal
                 size = 20,
                 -- | function(term)
-                    -- if term.direction == "horizontal" then
-                        -- return 15
-                    -- elseif term.direction == "vertical" then
-                        -- return vim.o.columns * 0.4
-                    -- end
+                -- if term.direction == "horizontal" then
+                -- return 15
+                -- elseif term.direction == "vertical" then
+                -- return vim.o.columns * 0.4
+                -- end
                 -- end,
                 open_mapping = [[<c-`>]],
                 hide_numbers = true, -- hide the number column in toggleterm buffers
@@ -228,18 +278,18 @@ require('packer').startup(function()
                 shell = 'sh.exe', -- change the default shell
                 -- This field is only relevant if direction is set to 'float'
                 -- float_opts = {
-                    -- -- The border key is *almost* the same as 'nvim_win_open'
-                    -- -- see :h nvim_win_open for details on borders however
-                    -- -- the 'curved' border is a custom border type
-                    -- -- not natively supported but implemented in this plugin.
-                    -- border = 'single', -- 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
-                    -- width = 1,
-                    -- height = 1,
-                    -- winblend = 3,
-                    -- highlights = {
-                        -- border = "Normal",
-                        -- background = "Normal",
-                    -- }
+                -- -- The border key is *almost* the same as 'nvim_win_open'
+                -- -- see :h nvim_win_open for details on borders however
+                -- -- the 'curved' border is a custom border type
+                -- -- not natively supported but implemented in this plugin.
+                -- border = 'single', -- 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
+                -- width = 1,
+                -- height = 1,
+                -- winblend = 3,
+                -- highlights = {
+                -- border = "Normal",
+                -- background = "Normal",
+                -- }
                 -- }
             }
         end
