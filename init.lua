@@ -17,8 +17,8 @@ vim.cmd 'set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab'
 
 opt.number = true
 opt.relativenumber = false
-opt.scrolloff = 8
-opt.sidescrolloff = 8
+opt.scrolloff = 10
+opt.sidescrolloff = 20
 opt.shiftround = true
 
 require('plugins')
