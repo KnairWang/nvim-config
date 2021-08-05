@@ -69,8 +69,8 @@ require('packer').startup(function()
         config = function()
             vim.g.nvim_tree_auto_open = 1
             vim.g.nvim_tree_auto_close = 0
-            vim.g.nvim_tree_follow = 1
-            vim.g.nvim_tree_highlight_opened_files = 1
+            vim.g.nvim_tree_follow = 0
+            vim.g.nvim_tree_highlight_opened_files = 0
             vim.g.nvim_tree_tab_open = 1
             vim.g.nvim_tree_add_trailing = 1
             vim.g.nvim_tree_lsp_diagnostics = 1
