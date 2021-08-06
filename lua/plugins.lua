@@ -30,37 +30,37 @@ require('packer').startup(function()
                 -- 'codicons' for codicon preset (requires vscode-codicons font installed)
                 --
                 -- default: 'default'
-                preset = 'codicons',
+                preset = 'default',
 
                 -- override preset symbols
                 --
                 -- default: {}
                 symbol_map = {
-                    Text = "",
-                    Method = "",
-                    Function = "",
-                    Constructor = "",
-                    Field = "﯑",
-                    Variable = "",
-                    Class = "ﴯ",
-                    Interface = "",
-                    Module = "",
-                    Property = "ﰠ",
-                    Unit = "塞",
-                    Value = "",
-                    Enum = "",
-                    Keyword = "",
-                    Snippet = "",
-                    Color = "",
-                    File = "",
-                    Reference = "",
-                    Folder = "",
-                    EnumMember = "",
-                    Constant = "",
-                    Struct = "פּ",
-                    Event = "",
-                    Operator = "",
-                    TypeParameter = "𝙏"
+                    Text = " ",
+                    Method = " ",
+                    Function = " ",
+                    Constructor = " ",
+                    Field = "﯑ ",
+                    Variable = " ",
+                    Class = "ﴯ ",
+                    Interface = " ",
+                    Module = " ",
+                    Property = "ﰠ ",
+                    Unit = "塞 ",
+                    Value = " ",
+                    Enum = " ",
+                    Keyword = " ",
+                    Snippet = " ",
+                    Color = " ",
+                    File = " ",
+                    Reference = " ",
+                    Folder = " ",
+                    EnumMember = " ",
+                    Constant = " ",
+                    Struct = "פּ ",
+                    Event = " ",
+                    Operator = " ",
+                    TypeParameter = "𝙏 "
                 },
             })
         end
@@ -90,7 +90,7 @@ require('packer').startup(function()
                 symbols = {
                     File = {icon = " ", hl = "TSURI"},
                     Module = {icon = " ", hl = "TSNamespace"},
-                    Namespace = {icon = " ", hl = "TSNamespace"},
+                    Namespace = {icon = " ", hl = "TSNamespace"},
                     Package = {icon = " ", hl = "TSNamespace"},
                     Class = {icon = "ﴯ ", hl = "TSType"},
                     Method = {icon = " ", hl = "TSMethod"},
@@ -105,8 +105,8 @@ require('packer').startup(function()
                     String = {icon = " ", hl = "TSString"},
                     Number = {icon = " ", hl = "TSNumber"},
                     Boolean = {icon = "⊨ ", hl = "TSBoolean"},
-                    Array = {icon = " ", hl = "TSConstant"},
-                    Object = {icon = "什 ", hl = "TSType"},
+                    Array = {icon = " ", hl = "TSConstant"},
+                    Object = {icon = " ", hl = "TSType"},
                     Key = {icon = " ", hl = "TSType"},
                     Null = {icon = "ﳠ ", hl = "TSType"},
                     EnumMember = {icon = " ", hl = "TSField"},
@@ -121,44 +121,49 @@ require('packer').startup(function()
 
     use 'kosayoda/nvim-lightbulb'
     use 'ray-x/lsp_signature.nvim'
+    use 'L3MON4D3/LuaSnip'
     use {
         'hrsh7th/nvim-compe',
         requires = {'neovim/nvim-lspconfig'},
         config = function()
             -- Compe setup
             require'compe'.setup {
-                enabled = true,
-                autocomplete = true,
-                debug = false,
-                min_length = 1,
-                preselect = 'enable',
-                throttle_time = 80,
-                source_timeout = 200,
-                incomplete_delay = 400,
-                max_abbr_width = 100,
-                max_kind_width = 100,
-                max_menu_width = 100,
-                documentation = true,
+                enabled = true;
+                autocomplete = true;
+                debug = false;
+                min_length = 1;
+                preselect = 'disable';
+                throttle_time = 80;
+                source_timeout = 200;
+                resolve_timeout = 800;
+                incomplete_delay = 400;
+                max_abbr_width = 100;
+                max_kind_width = 100;
+                max_menu_width = 100;
+                documentation = {
+                    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+                    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+                    max_width = 120,
+                    min_width = 60,
+                    max_height = math.floor(vim.o.lines * 0.3),
+                    min_height = 1,
+                };
 
-                source = {path = true, nvim_lsp = true}
+                source = {
+                    path = true;
+                    buffer = true;
+                    calc = true;
+                    nvim_lsp = true;
+                    nvim_lua = false;
+                    vsnip = false;
+                    ultisnips = false;
+                    luasnip = true;
+                };
             }
 
-            local t = function(str)
-                return vim.api.nvim_replace_termcodes(str, true, true, true)
-            end
-
-            local check_back_space = function()
-                local col = vim.fn.col('.') - 1
-                if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-                    return true
-                else
-                    return false
-                end
-            end
-
-            vim.api.nvim_set_keymap('i', '<Tab>', 'compe#confirm("<Tab>")', {expr = true})
+            vim.api.nvim_set_keymap('i', '<Tab>', 'compe#confirm({ "keys": "<Tab>", "select": v:true })', {expr = true})
             -- This line is important for auto-import
-            vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', {expr = true})
+            vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm({ "keys": "<cr>", "select": v:true })', {expr = true})
             vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', {expr = true})
         end
     }
@@ -431,7 +436,6 @@ local function setup_lsp()
     -- Use an on_attach function to only map the following keys
     -- after the language server attaches to the current buffer
     local on_attach = function(client, bufnr)
-
         lsp_status.on_attach(client, bufnr);
 
         local function buf_set_keymap(...)
@@ -485,14 +489,15 @@ local function setup_lsp()
         setup_nvim_lsputils()
     end
 
+    local capabilities = lsp_status.capabilities
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
     -- Use a loop to conveniently call 'setup' on multiple servers and
     -- map buffer local keybindings when the language server attaches
     local servers = {"rust_analyzer"}
     for _, lang in ipairs(servers) do
         nvim_lsp[lang].setup {
             on_attach = on_attach,
-            -- on_attach = lsp_status.on_attach,
-            capabilities = lsp_status.capabilities,
+            capabilities = capabilities,
             flags = {debounce_text_changes = 150}
         }
     end
