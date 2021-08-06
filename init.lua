@@ -20,6 +20,7 @@ opt.relativenumber = false
 opt.scrolloff = 10
 opt.sidescrolloff = 20
 opt.shiftround = true
+opt.shell = 'powershell.exe'
 
 local function map(mode, lhs, rhs, opts)
   local options = {noremap = true}
@@ -28,6 +29,8 @@ local function map(mode, lhs, rhs, opts)
 end
 
 map('n', '<leader>y', '"+y')
+map('v', '<leader>y', '"+y')
 map('n', '<leader>p', '"+p')
+map('v', '<leader>p', '"+p')
 
 require('plugins')

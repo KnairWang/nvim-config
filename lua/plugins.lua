@@ -1,42 +1,59 @@
 require('packer').startup(function()
     -- Packer can manage itself
-    use 'wbthomason/packer.nvim'
+    use {'wbthomason/packer.nvim', run = ':PackerCompile'}
 
     use 'tpope/vim-surround'
     use 'editorconfig/editorconfig-vim'
+    use {
+        'karb94/neoscroll.nvim',
+        config = function()
+            require('neoscroll').setup({
+                -- All these keys will be mapped to their corresponding default scrolling animation
+                mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>',
+                            '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
+                hide_cursor = true,          -- Hide cursor while scrolling
+                stop_eof = true,             -- Stop at <EOF> when scrolling downwards
+                use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
+                respect_scrolloff = false,   -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+                cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+                easing_function = nil,        -- Default easing function
+                pre_hook = nil,              -- Function to run before the scrolling animation starts
+                post_hook = nil,              -- Function to run after the scrolling animation ends
+            })
+        end
+    }
 
     -- lsp
     use 'neovim/nvim-lspconfig'
     use 'nvim-lua/lsp-status.nvim'
-    use 'nvim-lua/lsp_extensions.nvim'
     use {
         'glepnir/lspsaga.nvim',
         config = function()
             require('lspsaga').init_lsp_saga({
-                -- use_saga_diagnostic_sign = true
+                use_saga_diagnostic_sign = true,
                 error_sign = ' ',
                 warn_sign = ' ',
                 hint_sign = ' ',
                 infor_sign = ' ',
                 dianostic_header_icon = '   ',
                 code_action_icon = ' ',
-                -- code_action_prompt = {
-                --   enable = true,
-                --   sign = true,
-                --   sign_priority = 20,
-                --   virtual_text = true,
-                -- },
+                code_action_prompt = {
+                    enable = false,
+                    sign = true,
+                    sign_priority = 40,
+                    virtual_text = true,
+                },
                 finder_definition_icon = '  ',
                 finder_reference_icon = '  ',
                 max_preview_lines = 10, -- preview lines of lsp_finder and definition preview
                 finder_action_keys = {
-                  open = '<CR>', vsplit = 's',split = 'i',quit = {'q', '<Esc>'},scroll_down = '<C-f>', scroll_up = '<C-b>' -- quit can be a table
+                    open = '<CR>', vsplit = 's',split = 'i',quit = {'q', '<Esc>'},scroll_down = '<C-f>', scroll_up = '<C-b>' -- quit can be a table
                 },
                 code_action_keys = {
-                  quit = {'<Esc>', '<C-c>','q'}, exec = '<CR>'
+                    quit = {'<Esc>', '<C-c>','q'}, exec = '<CR>'
                 },
                 rename_action_keys = {
-                  quit = {'<Esc>', '<C-c>'}, exec = '<CR>'  -- quit can be a table
+                    quit = {'<Esc>', '<C-c>'}, exec = '<CR>'  -- quit can be a table
                 },
                 -- definition_preview_icon = '  '
                 -- "single" "double" "round" "plus"
@@ -47,6 +64,10 @@ require('packer').startup(function()
                 -- like server_filetype_map = {metals = {'sbt', 'scala'}}
                 -- server_filetype_map = {}
             })
+
+            local opts = {noremap = true, silent = true}
+            vim.api.nvim_set_keymap('n', '<C-`>', '<cmd>lua require("lspsaga.floaterm").open_float_terminal()<CR>', opts)
+            vim.api.nvim_set_keymap('t', '<C-`>', '<cmd>lua require("lspsaga.floaterm").close_float_terminal()<CR>', opts)
         end
     }
     use {
@@ -101,6 +122,7 @@ require('packer').startup(function()
     use {
         'simrat39/symbols-outline.nvim',
         config = function()
+            vim.api.nvim_set_keymap('n', '<leader>s', ':SymbolsOutlineOpen <CR>', {noremap = true, silent = true})
             vim.g.symbols_outline = {
                 highlight_hovered_item = true,
                 show_guides = true,
@@ -151,9 +173,6 @@ require('packer').startup(function()
             }
         end
     }
-
-    use 'kosayoda/nvim-lightbulb'
-    use 'ray-x/lsp_signature.nvim'
     use 'L3MON4D3/LuaSnip'
     use {
         'hrsh7th/nvim-compe',
@@ -214,7 +233,7 @@ require('packer').startup(function()
             vim.g.nvim_tree_add_trailing = 1
             vim.g.nvim_tree_lsp_diagnostics = 1
             vim.g.nvim_tree_update_cwd = 1
-            vim.g.nvim_tree_width = 40
+            vim.g.nvim_tree_width = 50
             vim.g.nvim_tree_window_picker_exclude = { filetype = { 'packer', 'qf', 'outline' }, buftype = { 'terminal' } }
         end
     }
@@ -251,7 +270,15 @@ require('packer').startup(function()
             })
         end
     }
-
+    use {
+        "lukas-reineke/indent-blankline.nvim",
+        config = function()
+            require("indent_blankline").setup({
+                char = "|",
+                buftype_exclude = {"terminal"}
+            })
+        end
+    }
     use {
         'glepnir/galaxyline.nvim',
         branch = 'main',
@@ -342,28 +369,6 @@ require('packer').startup(function()
     use {'yamatsum/nvim-cursorline', requires = {'dracula'}}
 
     use {
-        "akinsho/nvim-toggleterm.lua",
-        config = function()
-            -- need compile after these config updated
-            require("toggleterm").setup{
-                -- size can be a number or function which is passed the current terminal
-                size = 20,
-                open_mapping = [[<c-`>]],
-                hide_numbers = true, -- hide the number column in toggleterm buffers
-                shade_filetypes = {},
-                shade_terminals = true,
-                shading_factor = '1', -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
-                start_in_insert = true,
-                insert_mappings = false, -- whether or not the open mapping applies in insert mode
-                persist_size = true,
-                direction = 'float', -- 'vertical' | 'horizontal' | 'window' | 'float',
-                close_on_exit = true, -- close the terminal window when the process exits
-                shell = 'powershell.exe', -- change the default shell
-            }
-        end
-    }
-
-    use {
         'nvim-telescope/telescope.nvim',
         requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
         config = function()
@@ -410,8 +415,7 @@ require('packer').startup(function()
                     -- Developer configurations: Not meant for general override
                     buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
                 }
-            }
-            )
+            })
         end
     }
 end)
@@ -441,19 +445,27 @@ local function setup_lsp()
         -- Mappings.
         local opts = {noremap = true, silent = true}
 
-        buf_set_keymap('n', 'gh', '<cmd>lua require("lspsaga.hover").render_hover_doc()<CR>', opts)
-        buf_set_keymap('n', 'gf', '<cmd>lua require("lspsaga.provider").lsp_finder()<CR>', opts)
-        buf_set_keymap('n', 'gd', '<cmd>lua require("lspsaga.provider").preview_definition()<CR>', opts)
-        buf_set_keymap('n', 'gs', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
-        buf_set_keymap('n', 'gi', '<cmd>lua require("lspsaga.implement").lspsaga_implementation()<CR>', opts)
+        buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+        buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+        buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+        buf_set_keymap('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+        buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+        buf_set_keymap('n', 'gc', '<cmd>lua vim.lsp.buf.incoming_calls()<CR>', opts)
+        buf_set_keymap('n', 'gC', '<cmd>lua vim.lsp.buf.outgoing_calls()<CR>', opts)
+        buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 
-        buf_set_keymap('n', '<C-f>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(1)<CR>', opts)
-        buf_set_keymap('n', '<C-b>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(-1)<CR>', opts)
+        -- buf_set_keymap('n', 'gf', '<cmd>lua require("lspsaga.provider").lsp_finder()<CR>', opts)
+        buf_set_keymap('n', '<space>h', '<cmd>lua require("lspsaga.hover").render_hover_doc()<CR>', opts)
+        buf_set_keymap('n', '<space>j', '<cmd>lua require("lspsaga.provider").preview_definition()<CR>', opts)
+        buf_set_keymap('n', '<space>k', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
+        -- buf_set_keymap('n', 'gi', '<cmd>lua require("lspsaga.implement").lspsaga_implementation()<CR>', opts)
 
         -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
         -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
         -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
+        buf_set_keymap('n', '<space>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
+        buf_set_keymap('v', '<space>ca', '<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
         buf_set_keymap('n', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
         buf_set_keymap('v', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
 
