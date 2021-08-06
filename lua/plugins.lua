@@ -40,10 +40,10 @@ require('packer').startup(function()
                     Method = "",
                     Function = "",
                     Constructor = "",
-                    Field = "ﰠ",
+                    Field = "﯑",
                     Variable = "",
                     Class = "ﴯ",
-                    Interface = "",
+                    Interface = "",
                     Module = "",
                     Property = "ﰠ",
                     Unit = "塞",
@@ -60,9 +60,62 @@ require('packer').startup(function()
                     Struct = "פּ",
                     Event = "",
                     Operator = "",
-                    TypeParameter = ""
+                    TypeParameter = "𝙏"
                 },
             })
+        end
+    }
+    use {
+        'simrat39/symbols-outline.nvim',
+        config = function()
+            vim.g.symbols_outline = {
+                highlight_hovered_item = true,
+                show_guides = true,
+                auto_preview = true,
+                position = 'right',
+                width = 25,
+                show_numbers = false,
+                show_relative_numbers = false,
+                show_symbol_details = true,
+                keymaps = { -- These keymaps can be a string or a table for multiple keys
+                    close = {"<Esc>", "q"},
+                    goto_location = "<Cr>",
+                    focus_location = "o",
+                    hover_symbol = "<C-space>",
+                    rename_symbol = "r",
+                    code_actions = "a",
+                },
+                lsp_blacklist = {},
+                symbol_blacklist = {},
+                symbols = {
+                    File = {icon = " ", hl = "TSURI"},
+                    Module = {icon = " ", hl = "TSNamespace"},
+                    Namespace = {icon = " ", hl = "TSNamespace"},
+                    Package = {icon = " ", hl = "TSNamespace"},
+                    Class = {icon = "ﴯ ", hl = "TSType"},
+                    Method = {icon = " ", hl = "TSMethod"},
+                    Property = {icon = "ﰠ ", hl = "TSMethod"},
+                    Field = {icon = "﯑ ", hl = "TSField"},
+                    Constructor = {icon = " ", hl = "TSConstructor"},
+                    Enum = {icon = " ", hl = "TSType"},
+                    Interface = {icon = " ", hl = "TSType"},
+                    Function = {icon = " ", hl = "TSFunction"},
+                    Variable = {icon = " ", hl = "TSConstant"},
+                    Constant = {icon = " ", hl = "TSConstant"},
+                    String = {icon = " ", hl = "TSString"},
+                    Number = {icon = " ", hl = "TSNumber"},
+                    Boolean = {icon = "⊨ ", hl = "TSBoolean"},
+                    Array = {icon = " ", hl = "TSConstant"},
+                    Object = {icon = "什 ", hl = "TSType"},
+                    Key = {icon = " ", hl = "TSType"},
+                    Null = {icon = "ﳠ ", hl = "TSType"},
+                    EnumMember = {icon = " ", hl = "TSField"},
+                    Struct = {icon = "פּ ", hl = "TSType"},
+                    Event = {icon = "🗲 ", hl = "TSType"},
+                    Operator = {icon = " ", hl = "TSOperator"},
+                    TypeParameter = {icon = "𝙏 ", hl = "TSParameter"}
+                }
+            }
         end
     }
 
@@ -126,6 +179,7 @@ require('packer').startup(function()
             vim.g.nvim_tree_lsp_diagnostics = 1
             vim.g.nvim_tree_update_cwd = 1
             vim.g.nvim_tree_width = 40
+            vim.g.nvim_tree_window_picker_exclude = { filetype = { 'packer', 'qf', 'outline' }, buftype = { 'terminal' } }
         end
     }
 
@@ -275,7 +329,7 @@ require('packer').startup(function()
                 persist_size = true,
                 direction = 'float', -- 'vertical' | 'horizontal' | 'window' | 'float',
                 close_on_exit = true, -- close the terminal window when the process exits
-                shell = 'sh.exe', -- change the default shell
+                shell = 'powershell.exe', -- change the default shell
                 -- This field is only relevant if direction is set to 'float'
                 -- float_opts = {
                 -- -- The border key is *almost* the same as 'nvim_win_open'
