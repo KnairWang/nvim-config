@@ -181,7 +181,6 @@ require('packer').startup(function()
                     max_height = math.floor(vim.o.lines * 0.3),
                     min_height = 1,
                 };
-
                 source = {
                     path = true;
                     buffer = true;
@@ -195,7 +194,6 @@ require('packer').startup(function()
             }
 
             vim.api.nvim_set_keymap('i', '<Tab>', 'compe#confirm({ "keys": "<Tab>", "select": v:true })', {expr = true})
-            -- This line is important for auto-import
             vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm({ "keys": "<cr>", "select": v:true })', {expr = true})
             vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', {expr = true})
         end
@@ -423,7 +421,7 @@ local function setup_lsp()
     local lsp_status = require('lsp-status')
     lsp_status.register_progress()
 
-    local nvim_lsp = require('lspconfig')
+    local lsp = require('lspconfig')
 
     -- Use an on_attach function to only map the following keys
     -- after the language server attaches to the current buffer
@@ -474,7 +472,7 @@ local function setup_lsp()
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
     -- rust_analyzer
-    nvim_lsp.rust_analyzer.setup({
+    lsp.rust_analyzer.setup({
         on_attach = on_attach,
         capabilities = capabilities,
         flags = {debounce_text_changes = 150},
