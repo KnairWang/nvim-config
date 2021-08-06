@@ -10,10 +10,43 @@ require('packer').startup(function()
     use 'nvim-lua/lsp-status.nvim'
     use 'nvim-lua/lsp_extensions.nvim'
     use {
-        'RishabhRD/nvim-lsputils',
-        requires = {'RishabhRD/popfix'},
+        'glepnir/lspsaga.nvim',
         config = function()
-            vim.cmd('set completeopt=menuone,noselect')
+            require('lspsaga').init_lsp_saga({
+                -- use_saga_diagnostic_sign = true
+                error_sign = ' ',
+                warn_sign = ' ',
+                hint_sign = ' ',
+                infor_sign = ' ',
+                dianostic_header_icon = '   ',
+                code_action_icon = ' ',
+                -- code_action_prompt = {
+                --   enable = true,
+                --   sign = true,
+                --   sign_priority = 20,
+                --   virtual_text = true,
+                -- },
+                finder_definition_icon = '  ',
+                finder_reference_icon = '  ',
+                max_preview_lines = 10, -- preview lines of lsp_finder and definition preview
+                finder_action_keys = {
+                  open = '<CR>', vsplit = 's',split = 'i',quit = {'q', '<Esc>'},scroll_down = '<C-f>', scroll_up = '<C-b>' -- quit can be a table
+                },
+                code_action_keys = {
+                  quit = {'<Esc>', '<C-c>','q'}, exec = '<CR>'
+                },
+                rename_action_keys = {
+                  quit = {'<Esc>', '<C-c>'}, exec = '<CR>'  -- quit can be a table
+                },
+                -- definition_preview_icon = '  '
+                -- "single" "double" "round" "plus"
+                -- border_style = "single"
+                rename_prompt_prefix = '➤',
+                -- if you don't use nvim-lspconfig you must pass your server name and
+                -- the related filetypes into this table
+                -- like server_filetype_map = {metals = {'sbt', 'scala'}}
+                -- server_filetype_map = {}
+            })
         end
     }
     use {
@@ -407,17 +440,6 @@ require('packer').startup(function()
     }
 end)
 
-local function setup_nvim_lsputils()
-    vim.lsp.handlers['textDocument/codeAction'] = require('lsputil.codeAction').code_action_handler
-    vim.lsp.handlers['textDocument/references'] = require('lsputil.locations').references_handler
-    vim.lsp.handlers['textDocument/definition'] = require('lsputil.locations').definition_handler
-    vim.lsp.handlers['textDocument/declaration'] = require('lsputil.locations').declaration_handler
-    vim.lsp.handlers['textDocument/typeDefinition'] = require('lsputil.locations').typeDefinition_handler
-    vim.lsp.handlers['textDocument/implementation'] = require('lsputil.locations').implementation_handler
-    vim.lsp.handlers['textDocument/documentSymbol'] = require('lsputil.symbols').document_handler
-    vim.lsp.handlers['workspace/symbol'] = require('lsputil.symbols').workspace_handler
-end
-
 local function setup_lsp()
     -- lsp status
     local lsp_status = require('lsp-status')
@@ -443,40 +465,33 @@ local function setup_lsp()
         -- Mappings.
         local opts = {noremap = true, silent = true}
 
-        -- See `:help vim.lsp.*` for documentation on any of the below functions
-        buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-        buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-        buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-        buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-        buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+        buf_set_keymap('n', 'gh', '<cmd>lua require("lspsaga.hover").render_hover_doc()<CR>', opts)
+        buf_set_keymap('n', 'gf', '<cmd>lua require("lspsaga.provider").lsp_finder()<CR>', opts)
+        buf_set_keymap('n', 'gd', '<cmd>lua require("lspsaga.provider").preview_definition()<CR>', opts)
+        buf_set_keymap('n', 'gs', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
+        buf_set_keymap('n', 'gi', '<cmd>lua require("lspsaga.implement").lspsaga_implementation()<CR>', opts)
 
-        buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        buf_set_keymap('n', 'gh', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+        buf_set_keymap('n', '<C-f>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(1)<CR>', opts)
+        buf_set_keymap('n', '<C-b>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(-1)<CR>', opts)
 
-        buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+        -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+        -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+        -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-        buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-        buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-        buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+        buf_set_keymap('n', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
+        buf_set_keymap('v', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
+
+        buf_set_keymap('n', '<space>r', '<cmd>lua require("lspsaga.rename").rename()<CR>', opts)
         
-        -- code action
-        buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-        buf_set_keymap('v', '<space>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
-        buf_set_keymap('n', '<A-cr>', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-        buf_set_keymap('v', '<A-cr>', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
-
-        buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-        
-        buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-        buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-        buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-        buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+        buf_set_keymap('n', '<space>e', '<cmd>lua require("lspsaga.diagnostic").show_line_diagnostics()<CR>', opts)
+        buf_set_keymap('n', '<space>d', '<cmd>lua require("lspsaga.diagnostic").show_cursor_diagnostics()<CR>', opts)
+        buf_set_keymap('n', '[d', '<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_prev()<CR>', opts)
+        buf_set_keymap('n', ']d', '<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_next()<CR>', opts)
 
         buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-
-        setup_nvim_lsputils()
     end
 
+    vim.cmd('set completeopt=menuone,noselect')
     local capabilities = lsp_status.capabilities
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
