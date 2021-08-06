@@ -408,22 +408,14 @@ require('packer').startup(function()
 end)
 
 local function setup_nvim_lsputils()
-    vim.lsp.handlers['textDocument/codeAction'] =
-    require('lsputil.codeAction').code_action_handler
-    vim.lsp.handlers['textDocument/references'] =
-    require('lsputil.locations').references_handler
-    vim.lsp.handlers['textDocument/definition'] =
-    require('lsputil.locations').definition_handler
-    vim.lsp.handlers['textDocument/declaration'] =
-    require('lsputil.locations').declaration_handler
-    vim.lsp.handlers['textDocument/typeDefinition'] =
-    require('lsputil.locations').typeDefinition_handler
-    vim.lsp.handlers['textDocument/implementation'] =
-    require('lsputil.locations').implementation_handler
-    vim.lsp.handlers['textDocument/documentSymbol'] =
-    require('lsputil.symbols').document_handler
-    vim.lsp.handlers['workspace/symbol'] =
-    require('lsputil.symbols').workspace_handler
+    vim.lsp.handlers['textDocument/codeAction'] = require('lsputil.codeAction').code_action_handler
+    vim.lsp.handlers['textDocument/references'] = require('lsputil.locations').references_handler
+    vim.lsp.handlers['textDocument/definition'] = require('lsputil.locations').definition_handler
+    vim.lsp.handlers['textDocument/declaration'] = require('lsputil.locations').declaration_handler
+    vim.lsp.handlers['textDocument/typeDefinition'] = require('lsputil.locations').typeDefinition_handler
+    vim.lsp.handlers['textDocument/implementation'] = require('lsputil.locations').implementation_handler
+    vim.lsp.handlers['textDocument/documentSymbol'] = require('lsputil.symbols').document_handler
+    vim.lsp.handlers['workspace/symbol'] = require('lsputil.symbols').workspace_handler
 end
 
 local function setup_lsp()
@@ -454,53 +446,60 @@ local function setup_lsp()
         -- See `:help vim.lsp.*` for documentation on any of the below functions
         buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
         buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-        buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>',
-        opts)
-        buf_set_keymap('n', '<C-k>',
-        '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-        buf_set_keymap('n', '<space>wa',
-        '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-        buf_set_keymap('n', '<space>wr',
-        '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>',
-        opts)
-        buf_set_keymap('n', '<space>wl',
-        '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>',
-        opts)
-        buf_set_keymap('n', '<space>D',
-        '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-        buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>',
-        opts)
-        buf_set_keymap('n', '<space>ca',
-        '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+        buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
         buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-        buf_set_keymap('n', '<space>e',
-        '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',
-        opts)
-        buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',
-        opts)
-        buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>',
-        opts)
-        buf_set_keymap('n', '<space>q',
-        '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-        buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>",
-        opts)
+        buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+
+        buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+        buf_set_keymap('n', 'gh', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+
+        buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+
+        buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+        buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+        buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+        
+        -- code action
+        buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+        buf_set_keymap('v', '<space>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
+        buf_set_keymap('n', '<A-cr>', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+        buf_set_keymap('v', '<A-cr>', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
+
+        buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+        
+        buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+        buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+        buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+        buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+        buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
         setup_nvim_lsputils()
     end
 
     local capabilities = lsp_status.capabilities
     capabilities.textDocument.completion.completionItem.snippetSupport = true
-    -- Use a loop to conveniently call 'setup' on multiple servers and
-    -- map buffer local keybindings when the language server attaches
-    local servers = {"rust_analyzer"}
-    for _, lang in ipairs(servers) do
-        nvim_lsp[lang].setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = {debounce_text_changes = 150}
+
+    -- rust_analyzer
+    nvim_lsp.rust_analyzer.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = {debounce_text_changes = 150},
+        settings = {
+            ["rust-analyzer"] = {
+                assist = {
+                    importGranularity = "module",
+                    importPrefix = "by_self",
+                },
+                cargo = {
+                    loadOutDirsFromCheck = true
+                },
+                procMacro = {
+                    enable = true
+                },
+            }
         }
-    end
+    })
 end
 
 setup_lsp()
