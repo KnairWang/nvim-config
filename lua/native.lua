@@ -40,7 +40,7 @@ local plugins = {
     { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
     { 'winston0410/commented.nvim', requires = {'nvim-treesitter'} },
     { 'lukas-reineke/indent-blankline.nvim'},
-    { 'lewis6991/spellsitter.nvim', requires = {'nvim-treesitter/nvim-treesitter'} },
+    -- { 'lewis6991/spellsitter.nvim', requires = {'nvim-treesitter/nvim-treesitter'} },
     { 'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'} },
     { 'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} },
 
@@ -64,6 +64,6 @@ require('config.lspkind')
 require('config.lspsage')
 require('config.neoscroll')
 require('config.nvim-tree')
-require('config.spellsitter')
+-- require('config.spellsitter')
 require('config.symbol-outline')
 require('config.telescope')
