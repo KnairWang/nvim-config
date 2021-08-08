@@ -1,7 +1,5 @@
-vim.api.nvim_set_keymap('n', '<leader>s', ':SymbolsOutline <CR>', {
-    noremap = true,
-    silent = true
-})
+vim.api.nvim_set_keymap('n', '<leader>ws', ':SymbolsOutline <CR>', { noremap = true, silent = true })
+
 vim.g.symbols_outline = {
     highlight_hovered_item = true,
     show_guides = true,
