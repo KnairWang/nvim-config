@@ -18,7 +18,7 @@ opt.signcolumn = 'number'
 
 local plugins = {
     -- Packer can manage itself
-    { 'wbthomason/packer.nvim', run = ':PackerCompile' },
+    { 'wbthomason/packer.nvim' },
 
     'tpope/vim-surround',
     'editorconfig/editorconfig-vim',
