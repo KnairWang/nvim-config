@@ -9,5 +9,3 @@ if g.vscode ~= nil then
 else
   require('native')
 end
-
-cmd 'PackerCompile'
