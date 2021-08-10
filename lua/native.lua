@@ -23,6 +23,7 @@ local plugins = {
     'tpope/vim-surround',
     'editorconfig/editorconfig-vim',
     'karb94/neoscroll.nvim',
+    -- 'preservim/nerdtree',
 
     -- lsp
     'neovim/nvim-lspconfig',
@@ -39,7 +40,7 @@ local plugins = {
     { 'lukas-reineke/indent-blankline.nvim'},
     { 'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'} },
     -- works better with `scoop install fd rig ripgrep`, or install with `cargo`
-    { 'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} },
+    { 'nvim-telescope/telescope.nvim', requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'} },
 
     -- theme
     { 'dracula/vim', as = 'dracula' },
@@ -62,3 +63,4 @@ require('config.lspsage')
 require('config.neoscroll')
 require('config.symbol-outline')
 require('config.telescope')
+-- require('config.nerdtree')
