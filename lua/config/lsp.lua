@@ -85,3 +85,11 @@ lsp.rust_analyzer.setup({
         }
     }
 })
+
+lsp.tsserver.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    },
+})
