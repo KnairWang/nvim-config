@@ -8,6 +8,6 @@ vim.g.nvim_tree_lsp_diagnostics = 1
 vim.g.nvim_tree_update_cwd = 1
 vim.g.nvim_tree_width = 50
 vim.g.nvim_tree_window_picker_exclude = {
-    filetype = { 'packer', 'qf', 'Outline' },
+    filetype = { 'packer', 'qf', 'Outline', 'minimap' },
     buftype = { 'terminal' }
 }
