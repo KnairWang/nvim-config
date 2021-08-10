@@ -11,11 +11,14 @@ require('telescope').setup({
         layout_strategy = "horizontal",
         layout_config = {
             horizontal = {
-                mirror = false
+                mirror = false,
+                preview_cutting = 120
             },
             vertical = {
                 mirror = false
-            }
+            },
+            width = 0.8,
+            height = 0.45,
         },
         file_sorter = require'telescope.sorters'.get_fuzzy_file,
         file_ignore_patterns = {},
