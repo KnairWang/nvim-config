@@ -18,32 +18,32 @@ opt.signcolumn = 'number'
 
 local plugins = {
     -- Packer can manage itself
-    { 'wbthomason/packer.nvim' },
+    {'wbthomason/packer.nvim'},
 
     'tpope/vim-surround',
     'editorconfig/editorconfig-vim',
     'karb94/neoscroll.nvim',
-    -- 'preservim/nerdtree',
+    {'preservim/nerdtree', requires = {'ryanoasis/vim-devicons'}},
 
     -- lsp
     'neovim/nvim-lspconfig',
     'nvim-lua/lsp-status.nvim',
-    { 'glepnir/lspsaga.nvim' },
-    { 'onsails/lspkind-nvim' },
-    { 'simrat39/symbols-outline.nvim' },
+    {'glepnir/lspsaga.nvim'},
+    {'onsails/lspkind-nvim'},
+    {'simrat39/symbols-outline.nvim'},
     'L3MON4D3/LuaSnip',
-    { 'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig'} },
+    {'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig'}},
 
     -- treesitter
-    { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
-    { 'winston0410/commented.nvim', requires = {'nvim-treesitter'} },
-    { 'lukas-reineke/indent-blankline.nvim'},
-    { 'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'} },
+    {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'},
+    {'winston0410/commented.nvim', requires = {'nvim-treesitter'}},
+    {'lukas-reineke/indent-blankline.nvim'},
+    {'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'}},
     -- works better with `scoop install fd rig ripgrep`, or install with `cargo`
-    { 'nvim-telescope/telescope.nvim', requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'} },
+    {'nvim-telescope/telescope.nvim', requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'}},
 
     -- theme
-    { 'dracula/vim', as = 'dracula' },
+    {'dracula/vim', as = 'dracula' },
 }
 
 require('packer').startup(function()
@@ -63,4 +63,4 @@ require('config.lspsage')
 require('config.neoscroll')
 require('config.symbol-outline')
 require('config.telescope')
--- require('config.nerdtree')
+require('config.nerdtree')
