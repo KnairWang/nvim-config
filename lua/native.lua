@@ -42,10 +42,14 @@ local plugins = {
     { 'lukas-reineke/indent-blankline.nvim'},
     -- { 'lewis6991/spellsitter.nvim', requires = {'nvim-treesitter/nvim-treesitter'} },
     { 'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'} },
+    -- works better with `scoop install fd rig ripgrep`, or install with `cargo`
     { 'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} },
 
     -- theme
     { 'dracula/vim', as = 'dracula' },
+
+    -- minimap, require `scoop install code-minimap` or `cargo install code-minimap`
+    { 'wfxr/minimap.vim' }
 }
 
 require('packer').startup(function()
@@ -67,3 +71,4 @@ require('config.nvim-tree')
 -- require('config.spellsitter')
 require('config.symbol-outline')
 require('config.telescope')
+require('config.minimap')
