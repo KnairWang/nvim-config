@@ -1,13 +1,13 @@
 -- lsp status
-local lsp_status = require('lsp-status')
-lsp_status.register_progress()
+-- local lsp_status = require('lsp-status')
+-- lsp_status.register_progress()
 
 local lsp = require('lspconfig')
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    lsp_status.on_attach(client, bufnr);
+    -- lsp_status.on_attach(client, bufnr);
 
     local function buf_set_keymap(...)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -60,8 +60,9 @@ local on_attach = function(client, bufnr)
 end
 
 vim.cmd('set completeopt=menuone,noselect')
-local capabilities = lsp_status.capabilities
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- local capabilities = lsp_status.capabilities
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
+local capabilities =  vim.lsp.protocol.make_client_capabilities()
 
 -- rust_analyzer
 lsp.rust_analyzer.setup({

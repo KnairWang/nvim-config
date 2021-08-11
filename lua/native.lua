@@ -27,23 +27,26 @@ local plugins = {
 
     -- lsp
     'neovim/nvim-lspconfig',
-    'nvim-lua/lsp-status.nvim',
-    {'glepnir/lspsaga.nvim'},
-    {'onsails/lspkind-nvim'},
-    {'simrat39/symbols-outline.nvim'},
-    'L3MON4D3/LuaSnip',
+    -- 'nvim-lua/lsp-status.nvim',
+    'glepnir/lspsaga.nvim',
+    'onsails/lspkind-nvim',
+    'simrat39/symbols-outline.nvim',
+    -- 'L3MON4D3/LuaSnip',
     {'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig'}},
-
+    -- {'hrsh7th/vim-vsnip', requires = {'hrsh7th/vim-vsnip-integ'}},
     -- treesitter
     {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'},
     {'winston0410/commented.nvim', requires = {'nvim-treesitter'}},
     {'lukas-reineke/indent-blankline.nvim'},
-    {'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'}},
     -- works better with `scoop install fd rig ripgrep`, or install with `cargo`
     {'nvim-telescope/telescope.nvim', requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'}},
-
+    
     -- theme
     {'dracula/vim', as = 'dracula' },
+
+    -- status line
+    -- {'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'}},
+    {'hoob3rt/lualine.nvim', requires = {'ryanoasis/vim-devicons'}}
 }
 
 require('packer').startup(function()
@@ -55,7 +58,7 @@ end)
 require('config.dracula')
 require('config.commented')
 require('config.compe')
-require('config.galaxyline')
+-- require('config.galaxyline')
 require('config.indent-blankline')
 require('config.lsp')
 require('config.lspkind')
