@@ -12,7 +12,7 @@ opt.relativenumber = false
 opt.scrolloff = 10
 opt.sidescrolloff = 20
 opt.shiftround = true
-opt.shell = 'powershell.exe'
+-- opt.shell = 'sh.exe'
 opt.signcolumn = 'number'
 
 
