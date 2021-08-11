@@ -1,3 +1,5 @@
+vim.api.nvim_set_keymap('n', '<leader>we', ':NERDTree<CR>', { noremap = true, silent = true })
+
 -- vim.g.NERDTreeChDirMode = 2
 vim.g.NERDTreeWinSize = 50
 vim.g.NERDTreeHijackNetrw = 0

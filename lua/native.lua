@@ -46,7 +46,8 @@ local plugins = {
 
     -- status line
     -- {'glepnir/galaxyline.nvim', branch = 'main', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/lsp-status.nvim'}},
-    {'hoob3rt/lualine.nvim', requires = {'ryanoasis/vim-devicons'}}
+    {'hoob3rt/lualine.nvim', requires = {'ryanoasis/vim-devicons'}},
+    {'kdheepak/tabline.nvim', requires = {{ 'hoob3rt/lualine.nvim', opt=true }, {'kyazdani42/nvim-web-devicons', opt = true}}}
 }
 
 require('packer').startup(function()
@@ -68,3 +69,4 @@ require('config.symbol-outline')
 require('config.telescope')
 require('config.nerdtree')
 require('config.lualine')
+require('config.tabline')
