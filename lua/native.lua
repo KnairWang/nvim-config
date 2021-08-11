@@ -31,9 +31,9 @@ local plugins = {
     'glepnir/lspsaga.nvim',
     'onsails/lspkind-nvim',
     'simrat39/symbols-outline.nvim',
-    -- 'L3MON4D3/LuaSnip',
     {'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig'}},
-    -- {'hrsh7th/vim-vsnip', requires = {'hrsh7th/vim-vsnip-integ'}},
+    'L3MON4D3/LuaSnip',
+    {'hrsh7th/vim-vsnip', requires = {'hrsh7th/vim-vsnip-integ'}},
     -- treesitter
     {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'},
     {'winston0410/commented.nvim', requires = {'nvim-treesitter'}},

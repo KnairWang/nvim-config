@@ -61,8 +61,8 @@ end
 
 vim.cmd('set completeopt=menuone,noselect')
 -- local capabilities = lsp_status.capabilities
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local capabilities =  vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- rust_analyzer
 lsp.rust_analyzer.setup({
