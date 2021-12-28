@@ -4,8 +4,4 @@ local g = vim.g -- a table to access global variables
 local opt = vim.opt -- to set options
 
 require('common')
-if g.vscode ~= nil then
-  require('vscode')
-else
-  require('native')
-end
+require('native')
