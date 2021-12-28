@@ -14,5 +14,6 @@ opt.sidescrolloff = 20
 opt.shiftround = true
 -- opt.shell = 'sh.exe'
 opt.signcolumn = 'number'
+opt.mouse = 'a'
 
 require('plugin')
