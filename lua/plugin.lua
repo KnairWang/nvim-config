@@ -30,7 +30,7 @@ local plugins = {
 	{
 		description = 'nvim lspconfig: official lsp api wrapper',
 		enabled = true,
-		config = 'neovim/nvim-lspconfig',
+		config = {'neovim/nvim-lspconfig'},
 		requires = 'lsp'
 	},
 	{
@@ -49,17 +49,22 @@ local plugins = {
 		},
 		requires = 'auto-completion'
 	},
-    -- {'hrsh7th/vim-vsnip', requires = {'hrsh7th/vim-vsnip-integ'}},
     -- 'nvim-lua/lsp-status.nvim',
     -- 'glepnir/lspsaga.nvim',
     -- 'onsails/lspkind-nvim',
     -- 'simrat39/symbols-outline.nvim',
 
-    -- treesitter
+    -- treesitter, syntax, etc
 	{
 		description = 'treesitter',
 		enabled = true,
 		config = {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'},
+		requires = ''
+	},
+	{
+		description = 'vim-elixir: elixir file syntax highlight',
+		enabled = true,
+		config = {'elixir-editors/vim-elixir'},
 		requires = ''
 	},
     -- {'winston0410/commented.nvim', requires = {'nvim-treesitter'}},

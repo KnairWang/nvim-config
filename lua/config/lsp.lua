@@ -20,10 +20,13 @@ local on_attach = function(client, bufnr)
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings.
-    local opts = {
-        noremap = true,
-        silent = true
-    }
+    local opts = { noremap = true, silent = true }
+
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+
+    -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
     buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
@@ -34,27 +37,27 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', 'gC', '<cmd>lua vim.lsp.buf.outgoing_calls()<CR>', opts)
     buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 
-    -- buf_set_keymap('n', 'gf', '<cmd>lua require("lspsaga.provider").lsp_finder()<CR>', opts)
-    buf_set_keymap('n', '<space>h', '<cmd>lua require("lspsaga.hover").render_hover_doc()<CR>', opts)
-    buf_set_keymap('n', '<space>j', '<cmd>lua require("lspsaga.provider").preview_definition()<CR>', opts)
-    buf_set_keymap('n', '<space>k', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
-    -- buf_set_keymap('n', 'gi', '<cmd>lua require("lspsaga.implement").lspsaga_implementation()<CR>', opts)
+    local loaded, _ = pcall(require, 'lspsaga.hover')
+    if loaded then
+        -- buf_set_keymap('n', 'gf', '<cmd>lua require("lspsaga.provider").lsp_finder()<CR>', opts)
+        buf_set_keymap('n', '<space>h', '<cmd>lua require("lspsaga.hover").render_hover_doc()<CR>', opts)
+        buf_set_keymap('n', '<space>j', '<cmd>lua require("lspsaga.provider").preview_definition()<CR>', opts)
+        buf_set_keymap('n', '<space>k', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
+        -- buf_set_keymap('n', 'gi', '<cmd>lua require("lspsaga.implement").lspsaga_implementation()<CR>', opts)
 
-    -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-    -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-    -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-    buf_set_keymap('n', '<space>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
-    buf_set_keymap('v', '<space>ca', '<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
-    buf_set_keymap('n', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
-    buf_set_keymap('v', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
+        buf_set_keymap('n', '<space>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
+        buf_set_keymap('v', '<space>ca', '<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
+        buf_set_keymap('n', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
+        buf_set_keymap('v', '<A-cr>', '<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
 
-    buf_set_keymap('n', '<space>r', '<cmd>lua require("lspsaga.rename").rename()<CR>', opts)
+        buf_set_keymap('n', '<space>r', '<cmd>lua require("lspsaga.rename").rename()<CR>', opts)
 
-    buf_set_keymap('n', '<space>e', '<cmd>lua require("lspsaga.diagnostic").show_line_diagnostics()<CR>', opts)
-    buf_set_keymap('n', '<space>d', '<cmd>lua require("lspsaga.diagnostic").show_cursor_diagnostics()<CR>', opts)
-    buf_set_keymap('n', '[d', '<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_prev()<CR>', opts)
-    buf_set_keymap('n', ']d', '<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_next()<CR>', opts)
+        buf_set_keymap('n', '<space>e', '<cmd>lua require("lspsaga.diagnostic").show_line_diagnostics()<CR>', opts)
+        buf_set_keymap('n', '<space>d', '<cmd>lua require("lspsaga.diagnostic").show_cursor_diagnostics()<CR>', opts)
+        buf_set_keymap('n', '[d', '<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_prev()<CR>', opts)
+        buf_set_keymap('n', ']d', '<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_next()<CR>', opts)
+    end
 
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
@@ -62,6 +65,11 @@ end
 -- local capabilities = lsp_status.capabilities
 local capabilities =  vim.lsp.protocol.make_client_capabilities()
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+local loaded, lfs = pcall(require, 'cmp_nvim_lsp')
+if loaded then
+  capabilities = lfs.update_capabilities(capabilities)
+end
 
 -- rust_analyzer
 lsp.rust_analyzer.setup({
@@ -86,10 +94,22 @@ lsp.rust_analyzer.setup({
     }
 })
 
+-- typescripe
 lsp.tsserver.setup({
     on_attach = on_attach,
     capabilities = capabilities,
     flags = {
         debounce_text_changes = 150
     },
+})
+
+-- elixir
+lsp.elixirls.setup({
+    cmd = {'elixir-ls'};
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "elixir", "eelixir" },
+    settings = {
+        elixirLS = {}
+    }
 })
