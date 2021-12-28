@@ -77,7 +77,7 @@ end
 -- require('config.compe')
 -- require('config.galaxyline')
 -- require('config.indent-blankline')
-require('config.lsp')
+-- require('config.lsp')
 -- require('config.lspkind')
 -- require('config.lspsage')
 -- require('config.neoscroll')
