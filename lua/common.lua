@@ -1,9 +1,5 @@
 vim.g.mapleader = '\\'
 
-vim.cmd 'set nocompatible'
-vim.cmd 'set nobackup'
-vim.cmd 'set nowritebackup'
-
 local function map(mode, lhs, rhs, opts)
     local options = { noremap = true }
     if opts then
