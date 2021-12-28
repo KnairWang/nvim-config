@@ -59,10 +59,9 @@ local on_attach = function(client, bufnr)
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
 
-vim.cmd('set completeopt=menuone,noselect')
 -- local capabilities = lsp_status.capabilities
 local capabilities =  vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- rust_analyzer
 lsp.rust_analyzer.setup({

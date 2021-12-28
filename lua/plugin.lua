@@ -27,15 +27,36 @@ local plugins = {
     -- {'preservim/nerdtree', requires = {'ryanoasis/vim-devicons'}},
 
     -- lsp
-    -- 'neovim/nvim-lspconfig',
+	{
+		description = 'nvim lspconfig: official lsp api wrapper',
+		enabled = true,
+		config = 'neovim/nvim-lspconfig',
+		requires = 'lsp'
+	},
+	{
+		description = 'auto completion plugin',
+		enabled = true,
+		config = {
+			'hrsh7th/nvim-cmp',
+			requires = {
+				'hrsh7th/cmp-nvim-lsp',
+				'hrsh7th/cmp-buffer',
+				'hrsh7th/cmp-path',
+				'hrsh7th/cmp-cmdline',
+				'hrsh7th/cmp-vsnip',
+				'hrsh7th/vim-vsnip',
+			}
+		},
+		requires = 'auto-complettion'
+	},
     -- 'nvim-lua/lsp-status.nvim',
     -- 'glepnir/lspsaga.nvim',
     -- 'onsails/lspkind-nvim',
     -- 'simrat39/symbols-outline.nvim',
-    -- {'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig'}},
     -- 'L3MON4D3/LuaSnip',
     -- {'hrsh7th/vim-vsnip', requires = {'hrsh7th/vim-vsnip-integ'}},
-    -- -- treesitter
+    -- treesitter
+
     -- {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'},
     -- {'winston0410/commented.nvim', requires = {'nvim-treesitter'}},
     -- {'lukas-reineke/indent-blankline.nvim'},
@@ -72,15 +93,12 @@ for _, plugin in ipairs(plugins) do
 	end
 end
 
--- require('config.dracula')
 -- require('config.commented')
 -- require('config.compe')
 -- require('config.galaxyline')
 -- require('config.indent-blankline')
--- require('config.lsp')
 -- require('config.lspkind')
 -- require('config.lspsage')
--- require('config.neoscroll')
 -- require('config.symbol-outline')
 -- require('config.telescope')
 -- require('config.nerdtree')
