@@ -47,17 +47,21 @@ local plugins = {
 				'hrsh7th/vim-vsnip',
 			}
 		},
-		requires = 'auto-complettion'
+		requires = 'auto-completion'
 	},
+    -- {'hrsh7th/vim-vsnip', requires = {'hrsh7th/vim-vsnip-integ'}},
     -- 'nvim-lua/lsp-status.nvim',
     -- 'glepnir/lspsaga.nvim',
     -- 'onsails/lspkind-nvim',
     -- 'simrat39/symbols-outline.nvim',
-    -- 'L3MON4D3/LuaSnip',
-    -- {'hrsh7th/vim-vsnip', requires = {'hrsh7th/vim-vsnip-integ'}},
-    -- treesitter
 
-    -- {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'},
+    -- treesitter
+	{
+		description = 'treesitter',
+		enabled = true,
+		config = {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'},
+		requires = ''
+	},
     -- {'winston0410/commented.nvim', requires = {'nvim-treesitter'}},
     -- {'lukas-reineke/indent-blankline.nvim'},
     -- -- works better with `scoop install fd rig ripgrep`, or install with `cargo`
