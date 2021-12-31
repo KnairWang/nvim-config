@@ -2,6 +2,53 @@
 -- local lsp_status = require('lsp-status')
 -- lsp_status.register_progress()
 
+symbol_map = {
+    Text = " ",
+    Method = " ",
+    Function = " ",
+    Constructor = " ",
+    Field = "﯑ ",
+    Variable = " ",
+    Class = "ﴯ ",
+    Interface = " ",
+    Module = " ",
+    Property = "ﰠ ",
+    Unit = "塞 ",
+    Value = " ",
+    Enum = " ",
+    EnumMember = " ",
+    Keyword = " ",
+    Snippet = " ",
+    Color = " ",
+    File = " ",
+    Reference = " ",
+    Folder = " ",
+    Constant = " ",
+    Struct = "פּ ",
+    Event = " ",
+    Operator = " ",
+    TypeParameter = "𝙏 "
+}
+
+local kinds = vim.lsp.protocol.CompletionItemKind
+for i, kind in ipairs(kinds) do
+    kinds[i] = symbol_map[kind]..kind or kind
+end
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = false,
+})
+
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
 local lsp = require('lspconfig')
 
 -- Use an on_attach function to only map the following keys
