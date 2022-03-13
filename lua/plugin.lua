@@ -85,12 +85,18 @@ local plugins = {
 	},
 	{
 		description = 'indent blackline',
-		enabled = false,
+		enabled = true,
 		uses = {'lukas-reineke/indent-blankline.nvim'},
 		config = 'indent-blankline'
 	},
     -- -- works better with `scoop install fd ripgrep`, or install with `cargo`
     -- {'nvim-telescope/telescope.nvim', requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'}},
+	{
+		description = 'global search',
+		enabled = true,
+		uses = { "Yggdroot/LeaderF", cmd = "Leaderf", run = ":LeaderfInstallCExtension" },
+		config = 'leaderf'
+	},
     
     -- theme
 	{
