@@ -1,5 +1,5 @@
 return {
-    'dracula/vim',
-    as = 'dracula',
-    enabled = true,
+  'dracula/vim',
+  as = 'dracula',
+  enabled = true,
 }
