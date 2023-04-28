@@ -28,3 +28,11 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_particle_phase = 1.5    -- Only for the railgun vfx mode.
   vim.g.neovide_cursor_vfx_particle_curl = 1.0     -- Only for the railgun vfx mode.
 end
+
+-- disable mouse
+vim.opt.mouse = ""
+return {
+  opt = {
+    mouse = ""
+  }
+}
