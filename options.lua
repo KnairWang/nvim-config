@@ -1,9 +1,6 @@
-local font_family = "Monofur Nerd Font"
-local fallback_font_family = "Hack Nerd Font"
-
--- Put anything you want to happen only in Neovide here
 if vim.g.neovide then
-  vim.o.guifont = font_family .. "," .. fallback_font_family .. ":h12"
+  -- Put anything you want to happen only in Neovide here
+  vim.o.guifont = "Monofur NF,Monofur Nerd Font,Hack NF:h12"
   vim.g.neovide_scroll_animation_length = 1.5
   vim.g.neovide_hide_mouse_when_typing = true
   vim.g.neovide_refresh_rate = 75
