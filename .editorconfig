@@ -9,3 +9,4 @@ trim_trailing_whitespace = true
 
 [*.lua]
 indent_size = 2
+tab_width = 2
