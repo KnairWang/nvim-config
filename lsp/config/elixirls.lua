@@ -1,6 +1,6 @@
 return {
-  opts= {
-    settings = {
+  settings = {
+    elixirLS = {
       dialyzerEnabled = true,
       fetchDeps = false,
       enableTestLenses = false,
@@ -8,3 +8,4 @@ return {
     }
   }
 }
+
