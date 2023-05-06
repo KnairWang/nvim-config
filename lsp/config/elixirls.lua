@@ -2,9 +2,9 @@ return {
   settings = {
     elixirLS = {
       dialyzerEnabled = true,
-      fetchDeps = false,
+      fetchDeps = true,
       enableTestLenses = false,
-      suggestSpecs = true
+      suggestSpecs = false
     }
   }
 }
