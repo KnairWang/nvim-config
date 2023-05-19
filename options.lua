@@ -20,16 +20,17 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = "pixiedust"
   vim.g.neovide_cursor_vfx_opacity = 200.0         -- Sets the transparency of the generated particles.
   vim.g.neovide_cursor_vfx_particle_lifetime = 1.2 -- Sets the amount of time the generated particles should survive.
-  vim.g.neovide_cursor_vfx_particle_density = 13.0  -- Sets the number of generated particles.
+  vim.g.neovide_cursor_vfx_particle_density = 13.0 -- Sets the number of generated particles.
   vim.g.neovide_cursor_vfx_particle_speed = 10.0   -- Sets the speed of particle movement.
   vim.g.neovide_cursor_vfx_particle_phase = 1.5    -- Only for the railgun vfx mode.
   vim.g.neovide_cursor_vfx_particle_curl = 1.0     -- Only for the railgun vfx mode.
 end
 
 -- disable mouse
-vim.opt.mouse = ""
 return {
   opt = {
-    mouse = ""
+    mouse = "",
+    -- showmode = true,
+    wrap = true,
   }
 }

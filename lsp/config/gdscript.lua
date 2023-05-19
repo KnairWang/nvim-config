@@ -8,7 +8,7 @@ local cmd = nil
 if ("Windows_NT" == vim.loop.os_uname().sysname) then
   cmd = { 'ncat', address, port }
 else
-  cmd = vim.lsp.rpc.connect(address, tonumber(port))
+  cmd = { 'nc', address, port }
 end
 
 return {
