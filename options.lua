@@ -30,7 +30,7 @@ end
 return {
   opt = {
     mouse = "",
-    -- showmode = true,
+    showmode = true,
     wrap = true,
   }
 }
