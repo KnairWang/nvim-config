@@ -1,6 +1,6 @@
 if vim.g.neovide then
   -- Put anything you want to happen only in Neovide here
-  vim.o.guifont = "Monofur Nerd Font,Hack Nerd Font,Symbols Nerd Font:h12"
+  vim.o.guifont = "Monofur Nerd Font Mono,Hack Nerd Font Mono,Symbols Nerd Font Mono:h12"
   vim.g.neovide_scroll_animation_length = 0.75
   vim.g.neovide_hide_mouse_when_typing = true
   vim.g.neovide_refresh_rate = 60
