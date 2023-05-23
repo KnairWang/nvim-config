@@ -15,4 +15,7 @@ return {
   cmd = cmd,
   filetypes = { 'gd', 'gdscript', 'gdscript3' },
   root_dir = util.root_pattern('project.godot', '.git'),
+  flags = {
+    debounce_text_changes = 150,
+  },
 }
