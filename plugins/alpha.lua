@@ -5,6 +5,7 @@ return {
   },
   opts = function(_, opts)
     local ascii = require("ascii")
-    opts.section.header.val = ascii.get_random("text", "neovim")
+    local nv = ascii.art.text.neovim
+    opts.section.header.val = nv.sharp
   end
 }
