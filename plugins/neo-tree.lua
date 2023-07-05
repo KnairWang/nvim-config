@@ -5,6 +5,9 @@ return {
       filtered_items = {
         visible = true
       }
+    },
+    window = {
+      width = 80
     }
   }
 }
