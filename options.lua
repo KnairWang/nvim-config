@@ -1,4 +1,5 @@
-  vim.o.guifont = "Hack Nerd Font Mono:h10"
+  -- vim.o.guifont = "Hack Nerd Font Mono:h10"
+  vim.o.guifont = "Monofur Nerd Font Mono:h12"
 
 if vim.g.neovide then
   -- Put anything you want to happen only in Neovide here
@@ -33,5 +34,6 @@ return {
     -- mouse = "",
     showmode = true,
     wrap = true,
+    scrolloff = 10,
   }
 }
