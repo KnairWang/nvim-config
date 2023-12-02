@@ -29,8 +29,16 @@ local types = require("cmp.types")
 
 local function prioritize(kind, higher)
   return function(entry1, entry2)
-    if entry1:get_kind() == kind then return higher end
-    if entry2:get_kind() == kind then return not higher end
+    local kind1 = entry1:get_kind()
+    local kind2 = entry2:get_kind()
+    if kind1 ~= kind2 then
+      if kind1 == kind then
+        return higher
+      elseif kind2 == kind then
+        return not higher
+      end
+    end
+    return nil
   end
 end
 
@@ -46,11 +54,15 @@ local function lexicographical(entry1, entry2)
   return nil
 end
 
+local function entry_filter(entry, cts)
+  return true
+end
+
 return {
   "hrsh7th/nvim-cmp",
   opts = {
     sources = cmp.config.sources {
-      { name = "nvim_lsp", priority = 1000 },
+      { name = "nvim_lsp", priority = 1000, entry_filter = entry_filter },
       { name = "luasnip",  priority = 750 },
       -- { name = "buffer", priority = 500 },
       { name = "path",     priority = 250 },
@@ -59,12 +71,17 @@ return {
       priority_weight = 2,
       comparators = {
         cmp.config.compare.exact,
-        prioritize(types.lsp.CompletionItemKind.Variable , true),
         prioritize(types.lsp.CompletionItemKind.Snippet, false),
+        prioritize(types.lsp.CompletionItemKind.Variable, true),
+        prioritize(types.lsp.CompletionItemKind.Field, true),
+        prioritize(types.lsp.CompletionItemKind.Property, true),
+        prioritize(types.lsp.CompletionItemKind.Method, true),
+        prioritize(types.lsp.CompletionItemKind.Function, true),
+        cmp.config.compare.kind,
+        cmp.config.compare.order,
+
         lexicographical,
         -- cmp.config.compare.sort_text,
-        cmp.config.compare.order,
-        -- cmp.config.compare.kind,
         -- cmp.config.compare.score,
         -- cmp.config.compare.length,
         -- cmp.config.compare.offset,
