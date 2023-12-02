@@ -72,6 +72,7 @@ return {
       comparators = {
         cmp.config.compare.exact,
         prioritize(types.lsp.CompletionItemKind.Snippet, false),
+        cmp.config.compare.sort_text,
         prioritize(types.lsp.CompletionItemKind.Variable, true),
         prioritize(types.lsp.CompletionItemKind.Field, true),
         prioritize(types.lsp.CompletionItemKind.Property, true),
@@ -81,7 +82,6 @@ return {
         cmp.config.compare.order,
 
         lexicographical,
-        -- cmp.config.compare.sort_text,
         -- cmp.config.compare.score,
         -- cmp.config.compare.length,
         -- cmp.config.compare.offset,
