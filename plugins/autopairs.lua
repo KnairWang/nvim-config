@@ -7,7 +7,7 @@ return {
     }
   },
   config = function(plugin, opts)
-    require "plugins.configs.nvim-autopairs"(plugin, opts)
+    require "plugins.configs.nvim-autopairs" (plugin, opts)
 
     local npairs = require "nvim-autopairs"
     local Rule = require "nvim-autopairs.rule"
@@ -16,15 +16,17 @@ return {
     npairs.add_rules(
       {
         Rule("<", ">", "rust")
-          :with_pair(cond.before_text("::"))
-          :with_cr(cond.none())
+            :with_pair(cond.before_text("::"))
+            :with_cr(cond.none())
+            :with_move(cond.done())
       }
     )
     npairs.add_rules(
       {
         Rule("<", ">", "rust")
-          :with_pair(cond.before_regex("%w"))
-          :with_cr(cond.none())
+            :with_pair(cond.before_regex("%w"))
+            :with_cr(cond.none())
+            :with_move(cond.done())
       }
     )
   end,
