@@ -74,10 +74,10 @@ return {
         prioritize(types.lsp.CompletionItemKind.Snippet, false),
         cmp.config.compare.sort_text,
         prioritize(types.lsp.CompletionItemKind.Variable, true),
+        prioritize(types.lsp.CompletionItemKind.Function, true),
         prioritize(types.lsp.CompletionItemKind.Field, true),
         prioritize(types.lsp.CompletionItemKind.Property, true),
         prioritize(types.lsp.CompletionItemKind.Method, true),
-        prioritize(types.lsp.CompletionItemKind.Function, true),
         cmp.config.compare.kind,
         cmp.config.compare.order,
 
