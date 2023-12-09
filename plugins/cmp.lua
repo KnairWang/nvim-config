@@ -73,9 +73,9 @@ return {
         cmp.config.compare.exact,
         prioritize(types.lsp.CompletionItemKind.Snippet, false),
         cmp.config.compare.sort_text,
+        prioritize(types.lsp.CompletionItemKind.Field, true),
         prioritize(types.lsp.CompletionItemKind.Variable, true),
         prioritize(types.lsp.CompletionItemKind.Function, true),
-        prioritize(types.lsp.CompletionItemKind.Field, true),
         prioritize(types.lsp.CompletionItemKind.Property, true),
         prioritize(types.lsp.CompletionItemKind.Method, true),
         cmp.config.compare.kind,
@@ -89,6 +89,15 @@ return {
         -- cmp.config.compare.recently_used,
         -- cmp.config.compare.locality,
       },
+    },
+    mapping = {
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        -- cmp.complete()
+        fallback()
+      end, { "i", "s" }),
+      ["<S-Tab>"] = cmp.mapping(function(fallback)
+        fallback()
+      end, { "i", "s" }),
     },
   }
 }
