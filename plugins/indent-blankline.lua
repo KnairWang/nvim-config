@@ -29,7 +29,10 @@ return {
   end,
   opts = {
     indent = {
-      char = { "➀", "➁", "➂", "➃", "➄", "➅", "➆" },
+      char = { "┊" },
+      -- char = { "○" },
+      -- char = { "⩇" },
+      -- char = { "➀", "➁", "➂", "➃", "➄", "➅", "➆" },
       highlight = highlight,
     },
     whitespace = {
@@ -38,10 +41,14 @@ return {
     },
     scope = {
       enabled = true,
-      show_start = true,
-      show_end = true,
+      show_start = false,
+      show_end = false,
       show_exact_scope = false,
-      char = { "➊", "➋", "➌", "➍", "➎", "➏", "➐" },
+      char = { "┃" },
+      -- char = { "⬧" },
+      -- char = { "⭗" },
+      -- char = { "⩆" },
+      -- char = { "➊", "➋", "➌", "➍", "➎", "➏", "➐" },
       highlight = highlight,
     },
   }
