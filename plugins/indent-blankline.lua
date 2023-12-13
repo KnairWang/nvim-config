@@ -23,12 +23,14 @@ return {
       vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
       vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
       vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+      vim.api.nvim_set_hl(0, "Scope", { fg = "#AEBEBE" })
     end)
 
     require("ibl").setup(opts)
   end,
   opts = {
     indent = {
+      -- char = { " " },
       char = { "┊" },
       -- char = { "○" },
       -- char = { "⩇" },
@@ -44,12 +46,13 @@ return {
       show_start = false,
       show_end = false,
       show_exact_scope = false,
-      char = { "┃" },
-      -- char = { "⬧" },
+      char = { "┋" },
+      -- char = { "┃" },
       -- char = { "⭗" },
       -- char = { "⩆" },
       -- char = { "➊", "➋", "➌", "➍", "➎", "➏", "➐" },
       highlight = highlight,
+      -- highlight = { "Scope" }
     },
   }
 }
