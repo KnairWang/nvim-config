@@ -93,11 +93,11 @@ return {
     },
     mapping = {
       ["<Tab>"] = cmp.mapping(function(fallback)
-        if luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
-        else
+        -- if luasnip.expand_or_jumpable() then
+        --   luasnip.expand_or_jump()
+        -- else
           fallback()
-        end
+        -- end
       end, { "i", "s" }),
       ["<S-Tab>"] = cmp.mapping(function(fallback)
         fallback()
