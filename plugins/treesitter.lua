@@ -3,7 +3,7 @@ return {
   opts = {
     highlight = {
       enable = true,
-      disable = function(_, bufnr) return vim.api.nvim_buf_line_count(bufnr) > 100000 end,
+      disable = function(_, bufnr) return vim.api.nvim_buf_line_count(bufnr) > 4096 end,
     },
     auto_install = true,
   },
