@@ -1,5 +1,6 @@
 local cmp = require "cmp"
 local types = require("cmp.types")
+local luasnip = require "luasnip"
 
 -- Text = 1,
 -- Method = 2,
@@ -92,8 +93,11 @@ return {
     },
     mapping = {
       ["<Tab>"] = cmp.mapping(function(fallback)
-        -- cmp.complete()
-        fallback()
+        if luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        else
+          fallback()
+        end
       end, { "i", "s" }),
       ["<S-Tab>"] = cmp.mapping(function(fallback)
         fallback()
