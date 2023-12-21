@@ -20,6 +20,7 @@ return {
     npairs.add_rules(
       {
         Rule("<", ">", "rust")
+            :with_pair(cond.not_after_regex("%w"))
             :with_pair(cond.before_text("::"))
             :with_cr(cond.none())
             :with_move(move_with_end_pair)
@@ -28,6 +29,7 @@ return {
     npairs.add_rules(
       {
         Rule("<", ">", "rust")
+            :with_pair(cond.not_after_regex("%w"))
             :with_pair(cond.before_regex("%w"))
             :with_cr(cond.none())
             :with_move(move_with_end_pair)
@@ -39,6 +41,7 @@ return {
         Rule("<", ">", "rust")
             :with_pair(cond.before_text("<"))
             :with_pair(cond.after_text(">"))
+            :with_pair(cond.not_after_regex("%w"))
             :with_cr(cond.none())
             :with_move(move_with_end_pair)
       }
