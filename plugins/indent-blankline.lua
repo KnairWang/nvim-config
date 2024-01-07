@@ -35,10 +35,10 @@ return {
       -- char = { "○" },
       -- char = { "⩇" },
       -- char = { "➀", "➁", "➂", "➃", "➄", "➅", "➆" },
-      highlight = highlight,
+      -- highlight = highlight,
     },
     whitespace = {
-      highlight = highlight,
+      -- highlight = highlight,
       remove_blankline_trail = true,
     },
     scope = {
@@ -51,7 +51,7 @@ return {
       -- char = { "⭗" },
       -- char = { "⩆" },
       -- char = { "➊", "➋", "➌", "➍", "➎", "➏", "➐" },
-      highlight = highlight,
+      -- highlight = highlight,
       -- highlight = { "Scope" }
     },
   }
