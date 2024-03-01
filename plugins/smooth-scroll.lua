@@ -13,12 +13,12 @@ else
 
         -- OPTIONS:
         always_scroll = false,   -- Scroll the cursor even when the window hasn't scrolled.
-        centered = true,         -- Keep cursor centered in window when using window scrolling.
+        centered = false,         -- Keep cursor centered in window when using window scrolling.
         disabled = false,        -- Disables the plugin.
-        default_delay = 1,       -- The default delay (in ms) between each line when scrolling.
+        default_delay = 0.1,       -- The default delay (in ms) between each line when scrolling.
         hide_cursor = false,     -- Hide the cursor while scrolling. Requires enabling termguicolors!
         horizontal_scroll = false, -- Enable smooth horizontal scrolling when view shifts left or right.
-        max_length = -1,         -- Maximum length (in ms) of a command. The line delay will be
+        max_length = 10,         -- Maximum length (in ms) of a command. The line delay will be
         -- re-calculated. Setting to -1 will disable this option.
         scroll_limit = 150,      -- Max number of lines moved before scrolling is skipped. Setting
         -- to -1 will disable this option.
